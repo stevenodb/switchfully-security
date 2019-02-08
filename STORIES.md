@@ -75,6 +75,7 @@ Experiment with correct and incorrect authorisation data and check if the app re
 Now that we've got authentication covered, let's move on the authorisation. 
 
 Our app has four roles:
+
 - CIVILIAN, who can join the army
 - PRIVATE, who can deployed army info
 - HUMAN_RELATIONSHIPS. He can promote privates and discharge soldiers
@@ -83,22 +84,22 @@ Our app has four roles:
 On top of the existing authentication code, implement security that blocks authenticated users from accessing certain endpoints if they don't have the necessary roles.
 
 Extra info:
+
 - http://www.baeldung.com/spring-security-expressions-basic
 
 Extra assignment:
+
 - The article offers multiple ways to fix this problem. Try implementing both and see if they both do the job.
 - Users can have multiple roles. Create a user who is both a PRIVATE and a HUMAN_RELATIONSHIPS and check if he can do everything both roles can.
 - When using the 'antMatchers' method, create a couple of new rest endpoints:
 
-GET /armies/tanks (getTanksInfo)
+    - GET /armies/tanks (getTanksInfo)
+    - POST /armies/tanks (addTanks)
+    - DELETE /armies/tanks (blowUpTanksAndEnjoyTheFireworks)
+    - PUT /armies/tanks (addNewTanks)
 
-POST /armies/tanks (addTanks)
+you don't have to implement these methods. All of them can be void.
 
-DELETE /armies/tanks (blowUpTanksAndEnjoyTheFireworks)
-
-PUT /armies/tanks (addNewTanks)
-
-you don't have to implement these methods. All of them can be void
 - The GET call should only be available to PRIVATE and GENERAL and CIVILIAN
 - The POST call should only be available to PRIVATE 
 - The DELETE call should only be available to GENERAL
