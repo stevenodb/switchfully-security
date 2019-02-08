@@ -167,13 +167,13 @@ public class BaobabTest extends RestAssuredTest {
     }
 
     @Test
-    public void promotePrivate_givenUserWithRoleGeneral_ThenShouldGetForbidden() {
+    public void promotePrivate_givenUserWithRoleGeneral_ThenShouldGetResult() {
         givenRequestForUser("GENNY", "RALLY")
                 .when()
                 .post(String.format("%s/%s/%s", ArmyResource.ARMY_RESOURCE_PATH, "promote", "ZWANETTA"))
                 .then()
                 .assertThat()
-                .statusCode(FORBIDDEN.value());
+                .statusCode(OK.value());
     }
 
 
@@ -210,12 +210,52 @@ public class BaobabTest extends RestAssuredTest {
     }
 
     @Test
-    public void dischargePrivate_givenUserWithRoleGeneral_ThenShouldGetForbidden() {
+    public void dischargePrivate_givenUserWithRoleGeneral_ThenShouldGetResult() {
         givenRequestForUser("GENNY", "RALLY")
                 .when()
                 .post(String.format("%s/%s/%s", ArmyResource.ARMY_RESOURCE_PATH, "discharge", "ZWANETTA"))
                 .then()
                 .assertThat()
-                .statusCode(FORBIDDEN.value());
+                .statusCode(OK.value());
+    }
+
+    @Test
+    public void getTanksInfo_givenUserWithRoleCivilian_ThenShouldGetResult() {
+        givenRequestForUser("ZWANETTA", "WORST")
+            .when()
+            .get(String.format("%s/%s", ArmyResource.ARMY_RESOURCE_PATH, "tanks"))
+            .then()
+            .assertThat()
+            .statusCode(OK.value());
+    }
+
+    @Test
+    public void getTanksInfo_givenUserWithRoleHumanRelations_ThenShouldGetForbidden() {
+        givenRequestForUser("UNCLE", "SAM")
+            .when()
+            .get(String.format("%s/%s", ArmyResource.ARMY_RESOURCE_PATH, "tanks"))
+            .then()
+            .assertThat()
+            .statusCode(FORBIDDEN.value());
+    }
+
+    @Test
+    public void getTanksInfo_givenUserWithRolePrivate_ThenShouldGetResult() {
+        givenRequestForUser("JMILLER", "THANKS")
+            .when()
+            .get(String.format("%s/%s", ArmyResource.ARMY_RESOURCE_PATH, "tanks"))
+            .then()
+            .assertThat()
+            .statusCode(OK.value());
+    }
+
+    @Test
+    public void getTanksInfo_givenUserWithRoleGeneral_ThenShouldGetResult() {
+        givenRequestForUser("GENNY", "RALLY")
+            .when()
+            .get(String.format("%s/%s", ArmyResource.ARMY_RESOURCE_PATH, "tanks"))
+            .then()
+            .assertThat()
+            .statusCode(OK.value());
     }
 }

@@ -2,7 +2,9 @@ package com.cegeka.switchfully.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -13,6 +15,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -25,6 +28,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().httpBasic()
                 .authenticationEntryPoint(authEntryPoint);
+        http.authorizeRequests()
+            .antMatchers("/armies/nuke/**").hasRole("GENERAL")
+            .antMatchers(HttpMethod.GET,"/armies/tanks/**").hasAnyRole("GENERAL", "CIVILIAN", "PRIVATE");
+//            .antMatchers(HttpMethod.POST,"/armies/tanks/**").hasAnyRole("PRIVATE");
     }
 
     @Autowired
@@ -41,10 +48,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .withUser("JMILLER").password(("{MD5}{NIELS}d037465e3ea09dd346e1a7271a111c77")).roles("PRIVATE")
                 .and()
 //                Password = SAM
-                .withUser("UNCLE").password(("{MD5}{ANDRE}212acec2581451c651fb0ee15db1ad59")).roles("HUMAN_RELATIONSHIPS")
+                .withUser("UNCLE").password(("{MD5}{ANDRE}212acec2581451c651fb0ee15db1ad59")).roles("HUMAN_RELATIONS")
                 .and()
 //                PASSWORD = RALLY
-                .withUser("GENNY").password(("{MD5}{FRIENDS4LIFE}1bf699ee7fe9e40b317197702b6dc44f")).roles("GENERAL");
+                .withUser("GENNY").password(("{MD5}{FRIENDS4LIFE}1bf699ee7fe9e40b317197702b6dc44f")).roles("GENERAL","HUMAN_RELATIONS");
     }
 
 }
